@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home page</title>
+
+  <style>
+    :root{
+      --bg1: #0f172a;
+      --bg2: #071029;
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --accent: #6ee7b7;
+      --accent-2: #60a5fa;
+      --muted: rgba(255,255,255,0.7);
+      --glass-border: rgba(255,255,255,0.08);
+      --radius: 14px;
+    }
+
+    /* Reset & base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.08), transparent),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding: 36px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      gap:24px;
+    }
+
+    /* Page container */
+    .wrap{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:start;
+    }
+
+    /* Left/main card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    header h1{
+      margin:0 0 8px;
+      font-size:28px;
+      letter-spacing: -0.3px;
+    }
+    header p{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size:14px;
+    }
+
+    /* input row */
+    .form-row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+
+    label.inline{
+      color:var(--muted);
+      font-size:13px;
+      min-width:160px;
+    }
+
+    input[type="text"], input[type="url"]{
+      flex:1 1 420px;
+      min-width:160px;
+      padding:14px 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      color: #ecf6ff;
+      outline:none;
+      font-size:15px;
+      transition: box-shadow .18s, transform .12s;
+    }
+    input::placeholder{ color: rgba(230,238,248,0.4) }
+
+    input:focus{
+      box-shadow: 0 6px 18px rgba(96,165,250,0.08);
+      border-color: rgba(96,165,250,0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn{
+      appearance:none;
+      border: none;
+      padding:12px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:15px;
+      background: linear-gradient(90deg,var(--accent), var(--accent-2));
+      color:#022028;
+      box-shadow: 0 8px 20px rgba(96,165,250,0.12), inset 0 -2px 6px rgba(0,0,0,0.12);
+      transition: transform .12s, box-shadow .12s, opacity .12s;
+    }
+    .btn:active{ transform: translateY(1px) scale(.998) }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+    /* Generated URL area */
+    .generated{
+      margin-top:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .generated .badge{
+      background: rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.04);
+      padding:10px 12px;
+      border-radius:10px;
+      font-size:14px;
+      color: var(--muted);
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .copy-btn{
+      border: none;
+      padding:8px 10px;
+      border-radius:8px;
+      background: rgba(255,255,255,0.04);
+      color:var(--muted);
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    /* Table */
+    .table-wrap{
+      margin-top:18px;
+      overflow:auto;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:640px;
+      font-size:14px;
+      color: #dfeeff;
+    }
+    thead th{
+      text-align:left;
+      padding:12px 16px;
+      font-size:13px;
+      color:var(--muted);
+      background: rgba(255,255,255,0.02);
+      position:sticky;
+      top:0;
+      backdrop-filter: blur(4px);
+    }
+    tbody td{
+      padding:12px 16px;
+      border-top:1px solid rgba(255,255,255,0.03);
+    }
+    tbody tr:hover{
+      background: rgba(96,165,250,0.03);
+    }
+    .shortid{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      background: rgba(255,255,255,0.03);
+      padding:6px 8px;
+      border-radius:8px;
+      display:inline-block;
+      font-size:13px;
+    }
+    .clicks{
+      font-weight:700;
+      color:var(--accent);
+    }
+
+    /* Right sidebar */
+    .sidebar{
+      position:sticky;
+      top:36px;
+      height:fit-content;
+      padding:18px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);
+    }
+    .meta{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .hint{
+      margin-top:12px;
+      background: rgba(255,255,255,0.02);
+      padding:10px;
+      border-radius:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* Responsive */
+    @media (max-width:980px){
+      .wrap{ grid-template-columns: 1fr; padding:0 6px }
+      .sidebar{ order:2; margin-top:8px; }
+    }
+    @media (max-width:460px){
+      header h1{ font-size:22px }
+      label.inline{ min-width:120px; font-size:13px }
+      input[type="text"]{ padding:12px }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- MAIN CARD -->
+    <div class="card" style="min-width:320px">
+      <header>
+        <h1>URL Shortener</h1>
+        <p>Paste a long URL and get a short, shareable link. Track clicks in the table below.</p>
+      </header>
+
+      <form action="/url" method="POST" id="shortForm" onsubmit="onSubmitBtn()">
+        <div class="form-row">
+          <label class="inline" for="oUrl">Enter your Original URL</label>
+          <!-- keep your EJS/ID as-is -->
+          <input id="oUrl" name="url" type="url" placeholder="https://example.com/path?query=1" required />
+          <button class="btn" id="genBtn" type="submit">Generate</button>
+        </div>
+      </form>
+
+      <!-- Generated URL (EJS) -->
+      <% if(locals.id){ %>
+        <div class="generated">
+          <div class="badge" id="generatedBadge">
+            <span style="font-size:13px;color:var(--muted)">URL Generated:</span>
+            <code style="font-family:ui-monospace,monospace; font-size:13px; color:#cffbf3;">
+              https://localhost:8000/url/<%= id %>
+            </code>
+          </div>
+          <button class="copy-btn" id="copyBtn" data-url="https://localhost:8000/url/<%= id %>">Copy</button>
+          <button class="copy-btn" id="openBtn" onclick="(function(e){e.preventDefault(); window.open('https://localhost:8000/url/<%= id %>','_blank')})(event)">Open</button>
+        </div>
+      <% } %>
+
+      <!-- Table of URLs -->
+      <div class="table-wrap" aria-hidden="<%= !locals.urls %>">
+        <% if(locals.urls){ %>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:64px">S.No</th>
+                <th>ShortID</th>
+                <th>Redirect</th>
+                <th style="width:90px">Clicks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% urls.forEach((url,index) => {%>
+                <tr>
+                  <td><%= index+1 %></td>
+                  <td><span class="shortid"><%= url.shortId %></span></td>
+                  <td title="<%= url.redirectURL %>">
+                    <a href="<%= url.redirectURL %>" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline;">
+                      <%= url.redirectURL.length > 50 ? url.redirectURL.slice(0,50) + '…' : url.redirectURL %>
+                    </a>
+                  </td>
+                  <td><span class="clicks"><%= url.visitHistory.length %></span></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <div style="padding:18px; color:var(--muted);">No URLs yet — generate your first short link above.</div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="meta">
+        <strong>Tips</strong>
+        <ul style="margin:8px 0 0 18px; padding:0; color:var(--muted)">
+          <li>Use HTTPS links for safer redirects.</li>
+          <li>Short IDs are case-sensitive — copy exactly.</li>
+          <li>Click count updates after each redirect.</li>
+        </ul>
+      </div>
+
+      <div class="hint">
+        Want a feature: <br>
+        • custom aliases • download CSV • per-link analytics
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // small UI helpers: disable button when submitting, copy generated link
+    const genBtn = document.getElementById('genBtn');
+    function onSubmitBtn(){
+      if(genBtn) genBtn.disabled = true;
+      // form will submit normally; server responds and re-renders page
+    }
+
+    // copy button handler (works if the generated EJS block is present)
+    const copyBtn = document.getElementById('copyBtn');
+    if(copyBtn){
+      copyBtn.addEventListener('click', async () => {
+        const url = copyBtn.getAttribute('data-url');
+        try {
+          await navigator.clipboard.writeText(url);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = 'Copy', 1500);
+        } catch (err) {
+          alert('Copy failed — please select and copy manually.');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
